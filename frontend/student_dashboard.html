@@ -1,0 +1,885 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full bg-slate-50">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Portal Dashboard</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            50: '#f0f3ff',
+                            100: '#e0e7ff',
+                            500: '#6366f1',
+                            600: '#4f46e5',
+                            700: '#4338ca',
+                            900: '#312e81',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+    </style>
+</head>
+<body class="h-full font-sans text-slate-800 antialiased flex flex-col md:flex-row overflow-hidden bg-slate-50">
+
+    <!-- Mobile Header -->
+    <div class="md:hidden bg-[#111827] text-white flex items-center justify-between p-4 z-50">
+        <div class="flex items-center gap-3">
+            <div class="bg-indigo-600 p-2 rounded-xl text-white font-bold text-lg">DTC</div>
+            <span class="font-semibold text-lg tracking-wide">Student Portal</span>
+        </div>
+        <button id="mobileMenuBtn" class="p-2 text-slate-300 hover:text-white focus:outline-none">
+            <i data-lucide="menu" class="w-6 h-6"></i>
+        </button>
+    </div>
+
+    <!-- Sidebar Navigation -->
+    <aside id="sidebar" class="fixed inset-y-0 left-0 z-40 w-64 bg-[#111827] text-slate-300 transform -translate-x-full md:translate-x-0 transition-transform duration-300 ease-in-out flex flex-col justify-between md:relative shadow-xl">
+        <div>
+            <!-- Branding -->
+            <div class="p-6 hidden md:flex items-center gap-3 border-b border-slate-800">
+                <div class="bg-indigo-600 p-2.5 rounded-xl text-white font-bold text-xl shadow-lg shadow-indigo-600/30">DTC</div>
+                <div>
+                    <h1 class="font-bold text-white tracking-wide text-base">Delhi Tech Campus</h1>
+                    <p class="text-xs text-slate-400">Student Portal v2.4</p>
+                </div>
+            </div>
+
+            <!-- Navigation Links -->
+            <nav class="p-4 space-y-1.5 mt-2">
+                <p class="px-4 text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">Main Navigation</p>
+                
+                <button onclick="switchTab('profile')" id="nav-profile" class="nav-item w-full flex items-center gap-3.5 px-4 py-3 rounded-xl font-medium text-sm transition-all text-white bg-indigo-600/90 shadow-lg shadow-indigo-600/20">
+                    <i data-lucide="user" class="w-5 h-5"></i>
+                    <span>Profile</span>
+                </button>
+
+                <button onclick="switchTab('attendance')" id="nav-attendance" class="nav-item w-full flex items-center gap-3.5 px-4 py-3 rounded-xl font-medium text-sm transition-all hover:bg-slate-800 hover:text-white">
+                    <i data-lucide="check-circle-2" class="w-5 h-5"></i>
+                    <span>Attendance</span>
+                    <span class="ml-auto bg-emerald-500/20 text-emerald-400 text-xs px-2 py-0.5 rounded-full font-semibold">88%</span>
+                </button>
+
+                <button onclick="switchTab('timetable')" id="nav-timetable" class="nav-item w-full flex items-center gap-3.5 px-4 py-3 rounded-xl font-medium text-sm transition-all hover:bg-slate-800 hover:text-white">
+                    <i data-lucide="clock" class="w-5 h-5"></i>
+                    <span>Time Table</span>
+                </button>
+
+                <button onclick="switchTab('calendar')" id="nav-calendar" class="nav-item w-full flex items-center gap-3.5 px-4 py-3 rounded-xl font-medium text-sm transition-all hover:bg-slate-800 hover:text-white">
+                    <i data-lucide="calendar" class="w-5 h-5"></i>
+                    <span>Calendar</span>
+                </button>
+            </nav>
+        </div>
+
+        <!-- Sidebar Bottom Status & User Brief -->
+        <div class="p-4 border-t border-slate-800">
+            <div class="bg-slate-800/60 p-3 rounded-xl flex items-center gap-3 mb-3">
+                <div class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></div>
+                <div class="text-xs">
+                    <p class="text-slate-200 font-medium">Academic Year 2026</p>
+                    <p class="text-slate-400">Semester VI (Active)</p>
+                </div>
+            </div>
+            <button class="w-full flex items-center justify-center gap-2 px-4 py-2.5 text-xs font-semibold text-rose-400 bg-rose-500/10 rounded-xl hover:bg-rose-500/20 transition-colors">
+                <i data-lucide="log-out" class="w-4 h-4"></i>
+                Sign Out
+            </button>
+        </div>
+    </aside>
+
+    <!-- Overlay for Mobile Sidebar -->
+    <div id="sidebarOverlay" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-30 hidden md:hidden"></div>
+
+    <!-- Main Content Area -->
+    <main class="flex-1 flex flex-col h-full overflow-y-auto">
+        <!-- Top App Header -->
+        <header class="bg-white border-b border-slate-200 sticky top-0 z-20 px-6 py-3.5 flex items-center justify-between shadow-sm">
+            <div class="flex items-center gap-4">
+                <h2 id="pageTitle" class="text-xl font-bold text-slate-800">Student Profile</h2>
+            </div>
+
+            <!-- Header Quick Stats & Controls -->
+            <div class="flex items-center gap-4">
+                <div class="hidden sm:flex items-center gap-6 bg-slate-50 border border-slate-200 rounded-xl px-4 py-1.5 text-xs">
+                    <div>
+                        <span class="text-slate-400 block font-medium">Attendance</span>
+                        <span class="font-bold text-emerald-600 text-sm">88.5%</span>
+                    </div>
+                    <div class="h-6 w-px bg-slate-200"></div>
+                    <div>
+                        <span class="text-slate-400 block font-medium">Current CGPA</span>
+                        <span class="font-bold text-indigo-600 text-sm">8.92</span>
+                    </div>
+                    <div class="h-6 w-px bg-slate-200"></div>
+                    <div>
+                        <span class="text-slate-400 block font-medium">Credits</span>
+                        <span class="font-bold text-slate-700 text-sm">84 / 160</span>
+                    </div>
+                </div>
+
+                <div class="flex items-center gap-2">
+                    <button class="relative p-2 text-slate-500 hover:text-slate-700 hover:bg-slate-100 rounded-xl transition-colors">
+                        <i data-lucide="bell" class="w-5 h-5"></i>
+                        <span class="absolute top-1.5 right-1.5 w-2 h-2 bg-indigo-600 rounded-full ring-2 ring-white"></span>
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- View Sections Container -->
+        <div class="p-6 max-w-7xl w-full mx-auto space-y-6">
+
+            <!-- TAB 1: PROFILE VIEW -->
+            <section id="tab-profile" class="tab-content space-y-6">
+                <!-- Main Student Info Banner / Card -->
+                <div class="bg-white rounded-2xl border border-slate-200/80 shadow-sm overflow-hidden">
+                    <div class="h-32 bg-[#1E3A8A] relative">
+                    </div>
+                    <div class="px-6 pb-6 relative">
+                        <div class="flex flex-col md:flex-row gap-6 items-start md:items-end -mt-16 mb-6">
+                            <!-- Image Avatar with Interactive Upload -->
+                            <!-- Student Profile Image -->
+                            <div class="relative">
+                                <div class="w-32 h-32 rounded-2xl ring-4 ring-white bg-slate-100 shadow-md overflow-hidden">
+
+                                    <img
+                                        id="avatarPreview"
+                                        src="images/student.jpg"
+                                        alt="Student Profile"
+                                        class="w-full h-full object-cover"
+                                    >
+
+                                </div>
+                            </div>
+
+                            <!-- Name & Core Info -->
+                            <div class="flex-1">
+                                <div class="flex flex-wrap items-center gap-3">
+                                    <h2 class="text-2xl font-bold text-slate-900" id="disp-name">Ankit Rana</h2>
+                                    <span class="bg-indigo-50 text-indigo-700 text-xs font-semibold px-2.5 py-1 rounded-lg border border-indigo-200/60">Active Student</span>
+                                </div>
+                                <p class="text-slate-500 font-medium text-sm mt-1">Enrollment: <span class="text-slate-800 font-semibold" id="disp-enrollment">11018002726</span></p>
+                            </div>
+
+                            <!-- Quick Action Buttons -->
+                            <div class="flex gap-2">
+                                <button onclick="toggleEditModal()" class="flex items-center gap-2 px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-sm font-semibold shadow-sm transition-all">
+                                    <i data-lucide="edit-3" class="w-4 h-4"></i>
+                                    Edit Info
+                                </button>
+                            </div>
+
+                            <!-- Student QR Code -->
+                            <div class="shrink-0 flex flex-col items-center gap-2 rounded-2xl border border-slate-200 bg-white p-3 shadow-sm">
+                                <p class="text-xs font-bold uppercase tracking-wider text-slate-500">Student QR Code</p>
+                                <img
+                                    id="studentQrCode"
+                                    src="qr/qr.png"
+                                    alt="Student QR code"
+                                    class="h-32 w-32 rounded-lg object-contain"
+                                    onerror="this.hidden=true; document.getElementById('qrMissingMessage').classList.remove('hidden');"
+                                >
+                                <p id="qrMissingMessage" class="hidden max-w-[8rem] text-center text-xs text-rose-600">
+                                    QR image not found. Place qr.png in the frontend folder.
+                                </p>
+                                <a href="/qr.png" download="student-qr.png"
+                                   class="text-xs font-semibold text-indigo-600 hover:text-indigo-800">
+                                    Download QR
+                                </a>
+                            </div>
+                        </div>
+
+                        <!-- Wireframe Data Grid Display -->
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 pt-4 border-t border-slate-100">
+                            <div class="p-3.5 bg-slate-50/80 rounded-xl border border-slate-100">
+                                <span class="text-xs font-medium text-slate-400 block uppercase tracking-wider mb-1">Full Name</span>
+                                <div class="flex items-center gap-2 text-slate-800 font-semibold">
+                                    <i data-lucide="user-check" class="w-4 h-4 text-indigo-500"></i>
+                                    <span id="card-name">Ankit Rana</span>
+                                </div>
+                            </div>
+
+                            <div class="p-3.5 bg-slate-50/80 rounded-xl border border-slate-100">
+                                <span class="text-xs font-medium text-slate-400 block uppercase tracking-wider mb-1">Enrollment No.</span>
+                                <div class="flex items-center gap-2 text-slate-800 font-semibold">
+                                    <i data-lucide="hash" class="w-4 h-4 text-indigo-500"></i>
+                                    <span id="card-enrollment">11018002726</span>
+                                </div>
+                            </div>
+
+                            <div class="p-3.5 bg-slate-50/80 rounded-xl border border-slate-100">
+                                <span class="text-xs font-medium text-slate-400 block uppercase tracking-wider mb-1">Course & Branch</span>
+                                <div class="flex items-center gap-2 text-slate-800 font-semibold">
+                                    <i data-lucide="book-open" class="w-4 h-4 text-indigo-500"></i>
+                                    <span id="card-course">B.Tech CSE Core</span>
+                                </div>
+                            </div>
+
+                            <div class="p-3.5 bg-slate-50/80 rounded-xl border border-slate-100">
+                                <span class="text-xs font-medium text-slate-400 block uppercase tracking-wider mb-1">Section</span>
+                                <div class="flex items-center gap-2 text-slate-800 font-semibold">
+                                    <i data-lucide="layers" class="w-4 h-4 text-indigo-500"></i>
+                                    <span id="card-section">Section D</span>
+                                </div>
+                            </div>
+
+                            <div class="p-3.5 bg-slate-50/80 rounded-xl border border-slate-100">
+                                <span class="text-xs font-medium text-slate-400 block uppercase tracking-wider mb-1">Student Portal ID</span>
+                                <div class="flex items-center gap-2 text-slate-800 font-semibold">
+                                    <i data-lucide="at-sign" class="w-4 h-4 text-indigo-500"></i>
+                                    <span id="card-id">ankitrana@dtc</span>
+                                </div>
+                            </div>
+
+                            <div class="p-3.5 bg-slate-50/80 rounded-xl border border-slate-100">
+                                <span class="text-xs font-medium text-slate-400 block uppercase tracking-wider mb-1">Contact Number</span>
+                                <div class="flex items-center gap-2 text-slate-800 font-semibold">
+                                    <i data-lucide="phone" class="w-4 h-4 text-indigo-500"></i>
+                                    <span id="card-phone">+91 954xxxxxx89</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Academic Overview Cards -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+                    <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm flex items-center gap-4">
+                        <div class="p-3.5 bg-emerald-50 text-emerald-600 rounded-xl">
+                            <i data-lucide="award" class="w-6 h-6"></i>
+                        </div>
+                        <div>
+                            <p class="text-xs font-medium text-slate-400">Current CGPA</p>
+                            <h3 class="text-2xl font-bold text-slate-900 mt-0.5">8.92</h3>
+                            <span class="text-[11px] text-emerald-600 font-semibold">Top 5% of Department</span>
+                        </div>
+                    </div>
+
+                    <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm flex items-center gap-4">
+                        <div class="p-3.5 bg-indigo-50 text-indigo-600 rounded-xl">
+                            <i data-lucide="check-check" class="w-6 h-6"></i>
+                        </div>
+                        <div>
+                            <p class="text-xs font-medium text-slate-400">Total Attendance</p>
+                            <h3 class="text-2xl font-bold text-slate-900 mt-0.5">88.5%</h3>
+                            <span class="text-[11px] text-indigo-600 font-semibold">Safe Zone (&gt;75%)</span>
+                        </div>
+                    </div>
+
+                    <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm flex items-center gap-4">
+                        <div class="p-3.5 bg-purple-50 text-purple-600 rounded-xl">
+                            <i data-lucide="book-check" class="w-6 h-6"></i>
+                        </div>
+                        <div>
+                            <p class="text-xs font-medium text-slate-400">Active Subjects</p>
+                            <h3 class="text-2xl font-bold text-slate-900 mt-0.5">6</h3>
+                            <span class="text-[11px] text-purple-600 font-semibold">Theory + Practical</span>
+                        </div>
+                    </div>
+
+                    <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm flex items-center gap-4">
+                        <div class="p-3.5 bg-amber-50 text-amber-600 rounded-xl">
+                            <i data-lucide="file-badge" class="w-6 h-6"></i>
+                        </div>
+                        <div>
+                            <p class="text-xs font-medium text-slate-400">Semester Credits</p>
+                            <h3 class="text-2xl font-bold text-slate-900 mt-0.5">24</h3>
+                            <span class="text-[11px] text-amber-600 font-semibold">Semester VI</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- TAB 2: ATTENDANCE VIEW -->
+            <section id="tab-attendance" class="tab-content hidden space-y-6">
+                <!-- Attendance Header Stats -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+                    <div class="bg-white p-6 rounded-2xl border border-slate-200/80 shadow-sm flex flex-col justify-between">
+                        <div>
+                            <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Overall Aggregate</span>
+                            <div class="flex items-baseline gap-2 mt-2">
+                                <h2 class="text-4xl font-extrabold text-slate-900">88.5%</h2>
+                                <span class="text-xs font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full">Eligible for Exams</span>
+                            </div>
+                        </div>
+                        <p class="text-xs text-slate-500 mt-4">Minimum requirement is 75%. Keep up the regular attendance!</p>
+                    </div>
+
+                    <div class="bg-white p-6 rounded-2xl border border-slate-200/80 shadow-sm flex flex-col justify-between">
+                        <div>
+                            <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Lectures Summary</span>
+                            <div class="grid grid-cols-2 gap-4 mt-3">
+                                <div>
+                                    <p class="text-xs text-slate-400">Attended</p>
+                                    <p class="text-2xl font-bold text-slate-800">142</p>
+                                </div>
+                                <div>
+                                    <p class="text-xs text-slate-400">Total Held</p>
+                                    <p class="text-2xl font-bold text-slate-800">160</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="w-full bg-slate-100 rounded-full h-2 mt-4 overflow-hidden">
+                            <div class="bg-emerald-500 h-2 rounded-full" style="width: 88.5%"></div>
+                        </div>
+                    </div>
+
+                    <div class="bg-white p-6 rounded-2xl border border-slate-200/80 shadow-sm flex flex-col justify-between">
+                        <div>
+                            <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Attendance Status</span>
+                            <div class="mt-3 flex items-center gap-3">
+                                <div class="p-2.5 bg-emerald-100 text-emerald-700 rounded-xl">
+                                    <i data-lucide="shield-check" class="w-6 h-6"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-bold text-slate-800">No Risk Warning</h4>
+                                    <p class="text-xs text-slate-500">All subjects above 75% cutoff threshold.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <span class="text-xs font-medium text-slate-400 mt-4">Updated: Today at 09:00 AM</span>
+                    </div>
+                </div>
+
+                <!-- Subject-wise Breakdown -->
+                <div class="bg-white rounded-2xl border border-slate-200/80 shadow-sm p-6">
+                    <h3 class="text-lg font-bold text-slate-900 mb-6">Subject-wise Attendance Breakdown</h3>
+                    
+                    <div class="space-y-6">
+                        <!-- Subject Item -->
+                        <div>
+                            <div class="flex justify-between items-center mb-2">
+                                <div>
+                                    <span class="font-bold text-slate-800">Data Structures & Algorithms</span>
+                                    <span class="text-xs text-slate-400 block">Course Code: CS301 | Faculty: Dr. Sharma</span>
+                                </div>
+                                <div class="text-right">
+                                    <span class="font-bold text-slate-900">92%</span>
+                                    <span class="text-xs text-slate-400 block">23 / 25 Attended</span>
+                                </div>
+                            </div>
+                            <div class="w-full bg-slate-100 rounded-full h-2.5 overflow-hidden">
+                                <div class="bg-emerald-500 h-2.5 rounded-full" style="width: 92%"></div>
+                            </div>
+                        </div>
+
+                        <!-- Subject Item -->
+                        <div>
+                            <div class="flex justify-between items-center mb-2">
+                                <div>
+                                    <span class="font-bold text-slate-800">Database Management Systems</span>
+                                    <span class="text-xs text-slate-400 block">Course Code: CS302 | Faculty: Prof. Verma</span>
+                                </div>
+                                <div class="text-right">
+                                    <span class="font-bold text-slate-900">85%</span>
+                                    <span class="text-xs text-slate-400 block">34 / 40 Attended</span>
+                                </div>
+                            </div>
+                            <div class="w-full bg-slate-100 rounded-full h-2.5 overflow-hidden">
+                                <div class="bg-indigo-500 h-2.5 rounded-full" style="width: 85%"></div>
+                            </div>
+                        </div>
+
+                        <!-- Subject Item -->
+                        <div>
+                            <div class="flex justify-between items-center mb-2">
+                                <div>
+                                    <span class="font-bold text-slate-800">Operating Systems</span>
+                                    <span class="text-xs text-slate-400 block">Course Code: CS303 | Faculty: Dr. Gupta</span>
+                                </div>
+                                <div class="text-right">
+                                    <span class="font-bold text-slate-900">78%</span>
+                                    <span class="text-xs text-slate-400 block">28 / 36 Attended</span>
+                                </div>
+                            </div>
+                            <div class="w-full bg-slate-100 rounded-full h-2.5 overflow-hidden">
+                                <div class="bg-amber-500 h-2.5 rounded-full" style="width: 78%"></div>
+                            </div>
+                        </div>
+
+                        <!-- Subject Item -->
+                        <div>
+                            <div class="flex justify-between items-center mb-2">
+                                <div>
+                                    <span class="font-bold text-slate-800">Computer Networks</span>
+                                    <span class="text-xs text-slate-400 block">Course Code: CS304 | Faculty: Prof. Rao</span>
+                                </div>
+                                <div class="text-right">
+                                    <span class="font-bold text-slate-900">95%</span>
+                                    <span class="text-xs text-slate-400 block">38 / 40 Attended</span>
+                                </div>
+                            </div>
+                            <div class="w-full bg-slate-100 rounded-full h-2.5 overflow-hidden">
+                                <div class="bg-emerald-500 h-2.5 rounded-full" style="width: 95%"></div>
+                            </div>
+                        </div>
+
+                        <!-- Subject Item -->
+                        <div>
+                            <div class="flex justify-between items-center mb-2">
+                                <div>
+                                    <span class="font-bold text-slate-800">Web Engineering Lab</span>
+                                    <span class="text-xs text-slate-400 block">Course Code: CS305L | Faculty: Ms. Kapoor</span>
+                                </div>
+                                <div class="text-right">
+                                    <span class="font-bold text-slate-900">90%</span>
+                                    <span class="text-xs text-slate-400 block">18 / 20 Attended</span>
+                                </div>
+                            </div>
+                            <div class="w-full bg-slate-100 rounded-full h-2.5 overflow-hidden">
+                                <div class="bg-emerald-500 h-2.5 rounded-full" style="width: 90%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- TAB 3: TIME TABLE VIEW -->
+            <section id="tab-timetable" class="tab-content hidden space-y-6">
+                <div class="bg-white rounded-2xl border border-slate-200/80 shadow-sm p-6 overflow-x-auto">
+                    <div class="flex justify-between items-center mb-6">
+                        <div>
+                            <h3 class="text-lg font-bold text-slate-900">Weekly Schedule</h3>
+                            <p class="text-xs text-slate-500">Section D - Semester VI</p>
+                        </div>
+                        <div class="flex gap-2">
+                            <span class="inline-flex items-center gap-1.5 px-3 py-1 bg-indigo-50 text-indigo-700 rounded-lg text-xs font-semibold">
+                                <span class="w-2 h-2 rounded-full bg-indigo-600"></span> Theory
+                            </span>
+                            <span class="inline-flex items-center gap-1.5 px-3 py-1 bg-emerald-50 text-emerald-700 rounded-lg text-xs font-semibold">
+                                <span class="w-2 h-2 rounded-full bg-emerald-600"></span> Lab
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- Timetable Grid -->
+                    <table class="w-full border-collapse text-left text-sm min-w-[700px]">
+                        <thead>
+                            <tr class="bg-slate-50 border-y border-slate-200 text-slate-500 text-xs uppercase tracking-wider">
+                                <th class="p-3 font-semibold w-28">Time Slot</th>
+                                <th class="p-3 font-semibold">Mon</th>
+                                <th class="p-3 font-semibold">Tue</th>
+                                <th class="p-3 font-semibold">Wed</th>
+                                <th class="p-3 font-semibold">Thu</th>
+                                <th class="p-3 font-semibold">Fri</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-100">
+                            <tr>
+                                <td class="p-3 font-medium text-slate-400 text-xs">09:00 - 10:00 AM</td>
+                                <td class="p-3">
+                                    <div class="bg-indigo-50 border border-indigo-100 p-2.5 rounded-xl">
+                                        <p class="font-bold text-indigo-900 text-xs">DSA (CS301)</p>
+                                        <p class="text-[11px] text-indigo-600">Room 204</p>
+                                    </div>
+                                </td>
+                                <td class="p-3">
+                                    <div class="bg-slate-50 border border-slate-100 p-2.5 rounded-xl">
+                                        <p class="font-bold text-slate-800 text-xs">DBMS (CS302)</p>
+                                        <p class="text-[11px] text-slate-500">Room 101</p>
+                                    </div>
+                                </td>
+                                <td class="p-3">
+                                    <div class="bg-indigo-50 border border-indigo-100 p-2.5 rounded-xl">
+                                        <p class="font-bold text-indigo-900 text-xs">DSA (CS301)</p>
+                                        <p class="text-[11px] text-indigo-600">Room 204</p>
+                                    </div>
+                                </td>
+                                <td class="p-3">
+                                    <div class="bg-slate-50 border border-slate-100 p-2.5 rounded-xl">
+                                        <p class="font-bold text-slate-800 text-xs">OS (CS303)</p>
+                                        <p class="text-[11px] text-slate-500">Room 302</p>
+                                    </div>
+                                </td>
+                                <td class="p-3">
+                                    <div class="bg-slate-50 border border-slate-100 p-2.5 rounded-xl">
+                                        <p class="font-bold text-slate-800 text-xs">CN (CS304)</p>
+                                        <p class="text-[11px] text-slate-500">Room 105</p>
+                                    </div>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td class="p-3 font-medium text-slate-400 text-xs">10:00 - 11:00 AM</td>
+                                <td class="p-3">
+                                    <div class="bg-slate-50 border border-slate-100 p-2.5 rounded-xl">
+                                        <p class="font-bold text-slate-800 text-xs">OS (CS303)</p>
+                                        <p class="text-[11px] text-slate-500">Room 302</p>
+                                    </div>
+                                </td>
+                                <td class="p-3">
+                                    <div class="bg-emerald-50 border border-emerald-100 p-2.5 rounded-xl" rowspan="2">
+                                        <p class="font-bold text-emerald-900 text-xs">Web Lab (CS305L)</p>
+                                        <p class="text-[11px] text-emerald-600">Lab 3 (2 Hours)</p>
+                                    </div>
+                                </td>
+                                <td class="p-3">
+                                    <div class="bg-slate-50 border border-slate-100 p-2.5 rounded-xl">
+                                        <p class="font-bold text-slate-800 text-xs">CN (CS304)</p>
+                                        <p class="text-[11px] text-slate-500">Room 105</p>
+                                    </div>
+                                </td>
+                                <td class="p-3">
+                                    <div class="bg-indigo-50 border border-indigo-100 p-2.5 rounded-xl">
+                                        <p class="font-bold text-indigo-900 text-xs">DSA (CS301)</p>
+                                        <p class="text-[11px] text-indigo-600">Room 204</p>
+                                    </div>
+                                </td>
+                                <td class="p-3">
+                                    <div class="bg-slate-50 border border-slate-100 p-2.5 rounded-xl">
+                                        <p class="font-bold text-slate-800 text-xs">DBMS (CS302)</p>
+                                        <p class="text-[11px] text-slate-500">Room 101</p>
+                                    </div>
+                                </td>
+                            </tr>
+
+                            <tr class="bg-amber-50/40">
+                                <td class="p-3 font-medium text-amber-700 text-xs">11:00 - 11:30 AM</td>
+                                <td colspan="5" class="p-2 text-center text-xs font-semibold text-amber-700 tracking-wider uppercase">
+                                    -- Recess / Lunch Break --
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td class="p-3 font-medium text-slate-400 text-xs">11:30 - 01:30 PM</td>
+                                <td class="p-3">
+                                    <div class="bg-emerald-50 border border-emerald-100 p-2.5 rounded-xl">
+                                        <p class="font-bold text-emerald-900 text-xs">DBMS Lab</p>
+                                        <p class="text-[11px] text-emerald-600">Lab 1</p>
+                                    </div>
+                                </td>
+                                <td class="p-3">
+                                    <div class="bg-slate-50 border border-slate-100 p-2.5 rounded-xl">
+                                        <p class="font-bold text-slate-800 text-xs">CN (CS304)</p>
+                                        <p class="text-[11px] text-slate-500">Room 105</p>
+                                    </div>
+                                </td>
+                                <td class="p-3">
+                                    <div class="bg-slate-50 border border-slate-100 p-2.5 rounded-xl">
+                                        <p class="font-bold text-slate-800 text-xs">DBMS (CS302)</p>
+                                        <p class="text-[11px] text-slate-500">Room 101</p>
+                                    </div>
+                                </td>
+                                <td class="p-3">
+                                    <div class="bg-emerald-50 border border-emerald-100 p-2.5 rounded-xl">
+                                        <p class="font-bold text-emerald-900 text-xs">OS Lab</p>
+                                        <p class="text-[11px] text-emerald-600">Lab 2</p>
+                                    </div>
+                                </td>
+                                <td class="p-3">
+                                    <div class="bg-slate-50 border border-slate-100 p-2.5 rounded-xl">
+                                        <p class="font-bold text-slate-800 text-xs">Library Session</p>
+                                        <p class="text-[11px] text-slate-500">Central Lib</p>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- TAB 4: CALENDAR VIEW -->
+            <section id="tab-calendar" class="tab-content hidden space-y-6">
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    <!-- Calendar Grid -->
+                    <div class="lg:col-span-2 bg-white rounded-2xl border border-slate-200/80 shadow-sm p-6">
+                        <div class="flex justify-between items-center mb-6">
+                            <h3 class="text-lg font-bold text-slate-900">Academic Calendar</h3>
+                            <div class="flex items-center gap-2">
+                                <span class="font-semibold text-slate-700 text-sm">October 2026</span>
+                            </div>
+                        </div>
+
+                        <!-- Days Header -->
+                        <div class="grid grid-cols-7 gap-2 text-center text-xs font-semibold text-slate-400 mb-2">
+                            <div>Sun</div><div>Mon</div><div>Tue</div><div>Wed</div><div>Thu</div><div>Fri</div><div>Sat</div>
+                        </div>
+
+                        <!-- Month Grid -->
+                        <div class="grid grid-cols-7 gap-2 text-sm">
+                            <div class="p-3 text-center text-slate-300">27</div>
+                            <div class="p-3 text-center text-slate-300">28</div>
+                            <div class="p-3 text-center text-slate-300">29</div>
+                            <div class="p-3 text-center text-slate-300">30</div>
+                            <div class="p-3 text-center font-medium text-slate-700 rounded-xl hover:bg-slate-50">1</div>
+                            <div class="p-3 text-center font-medium text-slate-700 rounded-xl hover:bg-slate-50">2</div>
+                            <div class="p-3 text-center font-medium text-slate-700 rounded-xl hover:bg-slate-50">3</div>
+                            <div class="p-3 text-center font-medium text-slate-700 rounded-xl hover:bg-slate-50">4</div>
+                            <div class="p-3 text-center font-medium text-slate-700 rounded-xl hover:bg-slate-50">5</div>
+                            <div class="p-3 text-center font-medium text-slate-700 rounded-xl hover:bg-slate-50">6</div>
+                            <div class="p-3 text-center font-medium text-slate-700 rounded-xl hover:bg-slate-50 relative">
+                                7
+                                <span class="w-1.5 h-1.5 bg-indigo-600 rounded-full mx-auto block mt-1"></span>
+                            </div>
+                            <div class="p-3 text-center font-medium text-slate-700 rounded-xl hover:bg-slate-50">8</div>
+                            <div class="p-3 text-center font-medium text-slate-700 rounded-xl hover:bg-slate-50">9</div>
+                            <div class="p-3 text-center font-medium text-slate-700 rounded-xl hover:bg-slate-50">10</div>
+                            <div class="p-3 text-center font-medium text-slate-700 rounded-xl hover:bg-slate-50">11</div>
+                            <div class="p-3 text-center font-medium text-slate-700 rounded-xl hover:bg-slate-50">12</div>
+                            <div class="p-3 text-center font-medium text-slate-700 rounded-xl hover:bg-slate-50">13</div>
+                            <div class="p-3 text-center font-semibold text-white bg-indigo-600 rounded-xl shadow-md">14</div>
+                            <div class="p-3 text-center font-medium text-slate-700 rounded-xl hover:bg-slate-50">15</div>
+                            <div class="p-3 text-center font-medium text-slate-700 rounded-xl hover:bg-slate-50 relative">
+                                16
+                                <span class="w-1.5 h-1.5 bg-amber-500 rounded-full mx-auto block mt-1"></span>
+                            </div>
+                            <div class="p-3 text-center font-medium text-slate-700 rounded-xl hover:bg-slate-50">17</div>
+                            <div class="p-3 text-center font-medium text-slate-700 rounded-xl hover:bg-slate-50">18</div>
+                            <div class="p-3 text-center font-medium text-slate-700 rounded-xl hover:bg-slate-50">19</div>
+                            <div class="p-3 text-center font-medium text-slate-700 rounded-xl hover:bg-slate-50">20</div>
+                            <div class="p-3 text-center font-medium text-slate-700 rounded-xl hover:bg-slate-50 relative">
+                                21
+                                <span class="w-1.5 h-1.5 bg-rose-500 rounded-full mx-auto block mt-1"></span>
+                            </div>
+                            <div class="p-3 text-center font-medium text-slate-700 rounded-xl hover:bg-slate-50">22</div>
+                            <div class="p-3 text-center font-medium text-slate-700 rounded-xl hover:bg-slate-50">23</div>
+                            <div class="p-3 text-center font-medium text-slate-700 rounded-xl hover:bg-slate-50">24</div>
+                            <div class="p-3 text-center font-medium text-slate-700 rounded-xl hover:bg-slate-50">25</div>
+                            <div class="p-3 text-center font-medium text-slate-700 rounded-xl hover:bg-slate-50">26</div>
+                            <div class="p-3 text-center font-medium text-slate-700 rounded-xl hover:bg-slate-50">27</div>
+                            <div class="p-3 text-center font-medium text-slate-700 rounded-xl hover:bg-slate-50">28</div>
+                            <div class="p-3 text-center font-medium text-slate-700 rounded-xl hover:bg-slate-50">29</div>
+                            <div class="p-3 text-center font-medium text-slate-700 rounded-xl hover:bg-slate-50">30</div>
+                            <div class="p-3 text-center font-medium text-slate-700 rounded-xl hover:bg-slate-50">31</div>
+                        </div>
+                    </div>
+
+                    <!-- Event Timeline -->
+                    <div class="bg-white rounded-2xl border border-slate-200/80 shadow-sm p-6">
+                        <h3 class="text-lg font-bold text-slate-900 mb-4">Upcoming Deadlines</h3>
+                        <div class="space-y-4">
+                            <div class="p-3.5 bg-amber-50 border border-amber-100 rounded-xl flex items-start gap-3">
+                                <div class="p-2 bg-amber-500 text-white rounded-lg mt-0.5">
+                                    <i data-lucide="file-text" class="w-4 h-4"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-bold text-slate-900 text-sm">DBMS Minor Project</h4>
+                                    <p class="text-xs text-slate-500 mt-0.5">Due Oct 16, 2026 • 11:59 PM</p>
+                                </div>
+                            </div>
+
+                            <div class="p-3.5 bg-rose-50 border border-rose-100 rounded-xl flex items-start gap-3">
+                                <div class="p-2 bg-rose-500 text-white rounded-lg mt-0.5">
+                                    <i data-lucide="alert-circle" class="w-4 h-4"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-bold text-slate-900 text-sm">Mid-Term Examinations</h4>
+                                    <p class="text-xs text-slate-500 mt-0.5">Starts Oct 21, 2026</p>
+                                </div>
+                            </div>
+
+                            <div class="p-3.5 bg-indigo-50 border border-indigo-100 rounded-xl flex items-start gap-3">
+                                <div class="p-2 bg-indigo-600 text-white rounded-lg mt-0.5">
+                                    <i data-lucide="calendar-event" class="w-4 h-4"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-bold text-slate-900 text-sm">Tech Fest 2026 Registration</h4>
+                                    <p class="text-xs text-slate-500 mt-0.5">Closes Oct 28, 2026</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+        </div>
+    </main>
+
+    <!-- EDIT PROFILE MODAL -->
+    <div id="editModal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl max-w-lg w-full p-6 shadow-2xl border border-slate-100 animate-in fade-in zoom-in-95 duration-200">
+            <div class="flex justify-between items-center mb-5 pb-3 border-b border-slate-100">
+                <h3 class="text-lg font-bold text-slate-900">Update Student Information</h3>
+                <button onclick="toggleEditModal()" class="text-slate-400 hover:text-slate-600 p-1">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+
+            <form id="editForm" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-semibold text-slate-600 mb-1">Student Name</label>
+                    <input type="text" id="input-name" value="Ankit Rana" class="w-full px-3.5 py-2.5 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                </div>
+
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-600 mb-1">Enrollment No.</label>
+                        <input type="text" id="input-enrollment" value="11018002726" class="w-full px-3.5 py-2.5 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-600 mb-1">Section</label>
+                        <input type="text" id="input-section" value="D" class="w-full px-3.5 py-2.5 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold text-slate-600 mb-1">Course & Branch</label>
+                    <input type="text" id="input-course" value="B.Tech CSE Core" class="w-full px-3.5 py-2.5 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                </div>
+
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-600 mb-1">Student ID</label>
+                        <input type="text" id="input-id" value="ankitrana@dtc" class="w-full px-3.5 py-2.5 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-600 mb-1">Contact No.</label>
+                        <input type="text" id="input-phone" value="+91 954xxxxxx89" class="w-full px-3.5 py-2.5 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                    </div>
+                </div>
+
+                <div class="flex justify-end gap-3 pt-4 border-t border-slate-100 mt-6">
+                    <button type="button" onclick="toggleEditModal()" class="px-4 py-2 text-sm font-semibold text-slate-600 bg-slate-100 hover:bg-slate-200 rounded-xl transition-colors">Cancel</button>
+                    <button type="submit" class="px-4 py-2 text-sm font-semibold text-white bg-indigo-600 hover:bg-indigo-700 rounded-xl shadow-sm transition-colors">Save Changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Initialize Icons
+        lucide.createIcons();
+
+        // Navigation Switching Logic
+        function switchTab(tabId) {
+            // Hide all tab contents
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+            
+            // Remove active styles from nav items
+            document.querySelectorAll('.nav-item').forEach(el => {
+                el.classList.remove('bg-indigo-600/90', 'text-white', 'shadow-lg', 'shadow-indigo-600/20');
+                el.classList.add('hover:bg-slate-800', 'hover:text-white');
+            });
+
+            // Show current tab content
+            const targetTab = document.getElementById(`tab-${tabId}`);
+            if (targetTab) targetTab.classList.remove('hidden');
+
+            // Set active styles on current nav button
+            const activeNav = document.getElementById(`nav-${tabId}`);
+            if (activeNav) {
+                activeNav.classList.add('bg-indigo-600/90', 'text-white', 'shadow-lg', 'shadow-indigo-600/20');
+                activeNav.classList.remove('hover:bg-slate-800', 'hover:text-white');
+            }
+
+            // Update Header Title dynamically
+            const pageTitle = document.getElementById('pageTitle');
+            const titleMap = {
+                'profile': 'Student Profile',
+                'attendance': 'Attendance Dashboard',
+                'timetable': 'Weekly Time Table',
+                'calendar': 'Academic Calendar & Events'
+            };
+            pageTitle.textContent = titleMap[tabId] || 'Dashboard';
+
+            // Close mobile menu on tab switch
+            closeMobileMenu();
+        }
+
+        // Mobile Sidebar Toggle Logic
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const sidebar = document.getElementById('sidebar');
+        const sidebarOverlay = document.getElementById('sidebarOverlay');
+
+        function openMobileMenu() {
+            sidebar.classList.remove('-translate-x-full');
+            sidebarOverlay.classList.remove('hidden');
+        }
+
+        function closeMobileMenu() {
+            sidebar.classList.add('-translate-x-full');
+            sidebarOverlay.classList.add('hidden');
+        }
+
+        mobileMenuBtn.addEventListener('click', () => {
+            if (sidebar.classList.contains('-translate-x-full')) {
+                openMobileMenu();
+            } else {
+                closeMobileMenu();
+            }
+        });
+
+        sidebarOverlay.addEventListener('click', closeMobileMenu);
+
+        // Image Upload Logic with Local Preview
+        const imageUpload = document.getElementById('imageUpload');
+        const avatarPreview = document.getElementById('avatarPreview');
+
+        imageUpload.addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    avatarPreview.src = event.target.result;
+                }
+                reader.readAsDataURL(file);
+            }
+        });
+
+        // Edit Profile Modal Logic
+        const editModal = document.getElementById('editModal');
+        const editForm = document.getElementById('editForm');
+
+        function toggleEditModal() {
+            editModal.classList.toggle('hidden');
+        }
+
+        editForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Retrieve Form Values
+            const name = document.getElementById('input-name').value;
+            const enrollment = document.getElementById('input-enrollment').value;
+            const course = document.getElementById('input-course').value;
+            const section = document.getElementById('input-section').value;
+            const studentId = document.getElementById('input-id').value;
+            const phone = document.getElementById('input-phone').value;
+
+            // Update Dashboard DOM Elements
+            document.getElementById('disp-name').textContent = name;
+            document.getElementById('disp-enrollment').textContent = enrollment;
+            document.getElementById('card-name').textContent = name;
+            document.getElementById('card-enrollment').textContent = enrollment;
+            document.getElementById('card-course').textContent = course;
+            document.getElementById('card-section').textContent = `Section ${section}`;
+            document.getElementById('card-id').textContent = studentId;
+            document.getElementById('card-phone').textContent = phone;
+
+            // Close Modal
+            toggleEditModal();
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,311 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#172554" />
+  <title>Delhi Technical Campus — Sign in</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --navy: #172554;
+      --blue: #3157d5;
+      --blue-dark: #2446bc;
+      --ink: #172033;
+      --muted: #697386;
+      --line: #e4e9f2;
+      --surface: #ffffff;
+      --canvas: #f5f7fc;
+      --soft-blue: #eef3ff;
+      --shadow: 0 22px 65px rgba(24, 39, 75, .10);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      padding: 28px;
+      display: grid;
+      place-items: center;
+      color: var(--ink);
+      background: var(--canvas);
+      font-family: "DM Sans", sans-serif;
+    }
+    button, input { font: inherit; }
+    .shell { width: min(100%, 1040px); }
+    .topbar {
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 18px; margin-bottom: 22px; padding: 0 4px;
+    }
+    .brand { display: flex; align-items: center; gap: 13px; min-width: 0; }
+    .brand-mark {
+      width: 46px; height: 46px; flex: 0 0 46px; border-radius: 14px;
+      display: grid; place-items: center; color: white;
+      background: #1E3A8A;
+      box-shadow: 0 8px 18px rgba(49, 87, 213, .24);
+    }
+    .brand-mark svg { width: 25px; height: 25px; }
+    .brand-name { font: 800 16px/1.25 "Manrope", sans-serif; letter-spacing: -.35px; }
+    .brand-caption { color: var(--muted); font-size: 12px; margin-top: 3px; }
+    .secure-note { display: flex; align-items: center; gap: 7px; color: #647087; font-size: 12px; }
+    .secure-note svg { width: 15px; height: 15px; color: #3d8b69; }
+    .panel {
+      background: rgba(255,255,255,.94); border: 1px solid #e8ecf4;
+      border-radius: 24px; overflow: hidden; box-shadow: var(--shadow);
+    }
+    .intro {
+      padding: 34px 40px 28px; text-align: center;
+      background: #ffffff;
+      border-bottom: 1px solid #edf0f6;
+    }
+    .eyebrow {
+      display: inline-flex; align-items: center; gap: 8px; margin-bottom: 12px;
+      color: var(--blue); text-transform: uppercase; letter-spacing: 1.55px;
+      font-size: 10px; font-weight: 800;
+    }
+    .eyebrow:before, .eyebrow:after { content: ""; width: 18px; height: 1px; background: #b8c7ff; }
+    h1 {
+      margin: 0; font: 800 clamp(25px, 3vw, 34px)/1.2 "Manrope", sans-serif;
+      letter-spacing: -1.15px; color: #16213a;
+    }
+    .intro p { margin: 11px 0 0; color: var(--muted); font-size: 14px; line-height: 1.65; }
+    .login-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; padding: 28px; }
+    .login-card {
+      border: 1px solid var(--line); border-radius: 18px; padding: 26px;
+      background: #fff; transition: border-color .2s, box-shadow .2s, transform .2s;
+    }
+    .login-card:hover { border-color: #cbd6ff; box-shadow: 0 12px 30px rgba(30, 55, 120, .07); transform: translateY(-2px); }
+    .role-head { display: flex; align-items: center; gap: 13px; margin-bottom: 23px; }
+    .role-icon {
+      width: 46px; height: 46px; display: grid; place-items: center; flex: 0 0 46px;
+      border-radius: 14px; color: var(--blue); background: var(--soft-blue);
+    }
+    .role-icon.teacher { color: #16816a; background: #e9f8f3; }
+    .role-icon svg { width: 23px; height: 23px; }
+    h2 { margin: 0; font: 800 17px/1.3 "Manrope", sans-serif; letter-spacing: -.35px; }
+    .role-subtitle { margin-top: 4px; color: var(--muted); font-size: 12px; }
+    .field { margin-bottom: 16px; }
+    label { display: block; margin-bottom: 7px; color: #374258; font-size: 12px; font-weight: 700; }
+    .input-wrap { position: relative; }
+    .input-wrap > svg {
+      position: absolute; top: 50%; left: 13px; transform: translateY(-50%);
+      width: 17px; height: 17px; color: #8994a8; pointer-events: none;
+    }
+    input {
+      width: 100%; height: 46px; padding: 0 42px 0 40px; border-radius: 10px;
+      border: 1px solid #dfe5ef; background: #fbfcfe; color: var(--ink);
+      outline: none; font-size: 13px; transition: border-color .2s, box-shadow .2s, background .2s;
+    }
+    input::placeholder { color: #a0a9b8; }
+    input:focus { border-color: #6b86ef; background: #fff; box-shadow: 0 0 0 3px rgba(67, 101, 224, .12); }
+    .toggle-password {
+      position: absolute; right: 9px; top: 50%; transform: translateY(-50%);
+      border: 0; background: transparent; color: #758098; cursor: pointer; padding: 5px;
+      display: grid; place-items: center;
+    }
+    .toggle-password svg { width: 17px; height: 17px; }
+    .form-options { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin: 2px 0 20px; }
+    .remember { display: flex; align-items: center; gap: 7px; margin: 0; color: #687389; font-size: 11px; font-weight: 500; cursor: pointer; }
+    .remember input { width: 14px; height: 14px; padding: 0; margin: 0; accent-color: var(--blue); }
+    a { color: var(--blue); text-decoration: none; font-size: 11px; font-weight: 700; }
+    a:hover { text-decoration: underline; }
+    .submit {
+      display: flex; align-items: center; justify-content: center; gap: 9px;
+      width: 100%; height: 46px; border: 0; border-radius: 10px;
+      color: white; background: #1E3A8A;
+      box-shadow: 0 7px 14px rgba(49, 87, 213, .18);
+      font-size: 13px; font-weight: 700; cursor: pointer;
+      transition: transform .15s, box-shadow .15s, filter .15s;
+    }
+    .submit.teacher-btn { background: #11765f; box-shadow: 0 7px 14px rgba(17, 118, 95, .16); }
+    .submit:hover { filter: brightness(1.04); transform: translateY(-1px); }
+    .submit:active { transform: translateY(0); }
+    .submit svg { width: 16px; height: 16px; }
+    .notice { display: none; margin-top: 12px; padding: 10px 12px; border-radius: 9px; font-size: 12px; line-height: 1.5; }
+    .notice.show { display: block; }
+    .notice.error { color: #a33333; background: #fff0f0; border: 1px solid #ffdada; }
+    .notice.success { color: #17694f; background: #eaf8f1; border: 1px solid #ccefe0; }
+    .divider { height: 1px; background: #edf0f6; margin: 20px 0 15px; }
+    .card-foot { color: #8791a3; text-align: center; font-size: 11px; line-height: 1.6; }
+    .footer { display: flex; justify-content: space-between; gap: 15px; padding: 0 5px; margin-top: 18px; color: #8992a3; font-size: 11px; }
+    .footer-links { display: flex; gap: 17px; }
+    .footer a { color: #788399; font-size: 11px; font-weight: 500; }
+    @media (max-width: 700px) {
+      body { padding: 18px 13px; place-items: start center; }
+      .topbar { align-items: flex-start; }
+      .secure-note { margin-top: 5px; font-size: 0; }
+      .secure-note svg { width: 18px; height: 18px; }
+      .intro { padding: 29px 18px 24px; }
+      .login-grid { grid-template-columns: 1fr; padding: 17px; gap: 15px; }
+      .login-card { padding: 22px; }
+      .footer { flex-direction: column; align-items: center; text-align: center; }
+    }
+    @media (prefers-reduced-motion: reduce) { *, *::before, *::after { transition: none !important; } }
+  </style>
+</head>
+<body>
+  <main class="shell">
+    <header class="topbar">
+      <div class="brand">
+        <div class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 9.5 12 4l9 5.5-9 5.5-9-5.5Z"/><path d="M7 12v4.2c2.8 2.5 7.2 2.5 10 0V12M21 10v6"/>
+          </svg>
+        </div>
+        <div>
+          <div class="brand-name">Delhi Technical Campus</div>
+          <div class="brand-caption">Campus portal · Secure access</div>
+        </div>
+      </div>
+      <div class="secure-note">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="10" width="16" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/><path d="m9 15 2 2 4-4"/></svg>
+        Protected sign-in
+      </div>
+    </header>
+
+    <section class="panel" aria-labelledby="page-title">
+      <div class="intro">
+        <div class="eyebrow">Welcome back</div>
+        <h1 id="page-title">Your campus, one sign-in away.</h1>
+        <p>Choose your portal to access the tools and resources you need.</p>
+      </div>
+
+      <div class="login-grid">
+        <section class="login-card" aria-labelledby="student-title">
+          <div class="role-head">
+            <div class="role-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21v-2a8 8 0 0 1 16 0v2"/></svg>
+            </div>
+            <div><h2 id="student-title">Student Login</h2><div class="role-subtitle">Access your student dashboard</div></div>
+          </div>
+          <form class="login-form" data-role="Student" novalidate>
+            <div class="field">
+              <label for="student-id">Student ID or email</label>
+              <div class="input-wrap">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>
+                <input id="student-id" name="username" type="text" placeholder="Enter your student ID" autocomplete="username" required />
+              </div>
+            </div>
+            <div class="field">
+              <label for="student-password">Password</label>
+              <div class="input-wrap">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="10" width="16" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>
+                <input id="student-password" name="password" type="password" placeholder="Enter your password" autocomplete="current-password" required />
+                <button class="toggle-password" type="button" aria-label="Show student password" data-target="student-password">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/></svg>
+                </button>
+              </div>
+            </div>
+            <div class="form-options">
+              <label class="remember"><input type="checkbox" name="remember" /> Remember me</label>
+              <a href="#" data-help="Student">Forgot password?</a>
+            </div>
+            <button class="submit" type="submit">Sign in as Student
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+            </button>
+            <div class="notice" role="status" aria-live="polite"></div>
+          </form>
+          <div class="divider"></div>
+          <div class="card-foot">Need help accessing your account?<br><a href="mailto:helpdesk@dtc.edu.in">Contact campus support</a></div>
+        </section>
+
+        <section class="login-card" aria-labelledby="teacher-title">
+          <div class="role-head">
+            <div class="role-icon teacher" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="13" rx="2"/><path d="M8 21h8M12 17v4M7 9h5M7 12h3M16 9h1"/></svg>
+            </div>
+            <div><h2 id="teacher-title">Teacher Login</h2><div class="role-subtitle">Manage classes and coursework</div></div>
+          </div>
+          <form class="login-form" data-role="Teacher" novalidate>
+            <div class="field">
+              <label for="teacher-id">Faculty ID or email</label>
+              <div class="input-wrap">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>
+                <input id="teacher-id" name="username" type="text" placeholder="Enter your faculty ID" autocomplete="username" required />
+              </div>
+            </div>
+            <div class="field">
+              <label for="teacher-password">Password</label>
+              <div class="input-wrap">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="10" width="16" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>
+                <input id="teacher-password" name="password" type="password" placeholder="Enter your password" autocomplete="current-password" required />
+                <button class="toggle-password" type="button" aria-label="Show teacher password" data-target="teacher-password">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/></svg>
+                </button>
+              </div>
+            </div>
+            <div class="form-options">
+              <label class="remember"><input type="checkbox" name="remember" /> Remember me</label>
+              <a href="#" data-help="Teacher">Forgot password?</a>
+            </div>
+            <button class="submit teacher-btn" type="submit">Sign in as Teacher
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+            </button>
+            <div class="notice" role="status" aria-live="polite"></div>
+          </form>
+          <div class="divider"></div>
+          <div class="card-foot">Faculty account assistance?<br><a href="mailto:helpdesk@dtc.edu.in">Contact campus support</a></div>
+        </section>
+      </div>
+    </section>
+
+    <footer class="footer">
+      <span>© <span id="year"></span> Delhi Technical Campus</span>
+      <div class="footer-links"><a href="#" data-info="Privacy policy">Privacy</a><a href="#" data-info="Terms of use">Terms</a><a href="mailto:helpdesk@dtc.edu.in">Help &amp; support</a></div>
+    </footer>
+  </main>
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    document.querySelectorAll('.toggle-password').forEach(button => {
+      button.addEventListener('click', () => {
+        const field = document.getElementById(button.dataset.target);
+        const showing = field.type === 'password';
+        field.type = showing ? 'text' : 'password';
+        button.setAttribute('aria-label', `${showing ? 'Hide' : 'Show'} ${button.dataset.target.startsWith('student') ? 'student' : 'teacher'} password`);
+      });
+    });
+
+    document.querySelectorAll('.login-form').forEach(form => {
+      form.addEventListener('submit', event => {
+        event.preventDefault();
+        const username = form.elements.username.value.trim();
+        const password = form.elements.password.value;
+        const notice = form.querySelector('.notice');
+        notice.className = 'notice show';
+        if (!username || !password) {
+          notice.classList.add('error');
+          notice.textContent = 'Please enter your ID/email and password to continue.';
+          if (!username) form.elements.username.focus();
+          else form.elements.password.focus();
+          return;
+        }
+        notice.classList.add('success');
+        notice.textContent = `Login page is ready. Redirecting...`;
+        setTimeout(() => {
+            if (form.dataset.role === 'Student') {
+              window.location.href = '/student-dashboard.html';
+            } else {
+                window.location.href = '/teacher-dashboard.html';
+            }
+        }, 700); })
+      });
+    });
+
+    document.querySelectorAll('[data-help]').forEach(link => {
+      link.addEventListener('click', event => {
+        event.preventDefault();
+        const role = link.dataset.help.toLowerCase();
+        alert(`To reset your ${role} password, please contact the campus IT helpdesk.`);
+      });
+    });
+    document.querySelectorAll('[data-info]').forEach(link => {
+      link.addEventListener('click', event => {
+        event.preventDefault();
+        alert(`${link.dataset.info} page can be linked here.`);
+      });
+    });
+  </script>
+</body>
+</html>
